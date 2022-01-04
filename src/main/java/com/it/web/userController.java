@@ -78,6 +78,7 @@ public class userController {
     @RequestMapping("del/{id}")
     public String del(@PathVariable("id") Integer id, Model model){
         us.delUser(id);
+        System.out.println("888888888");
         return "redirect:/usera/list";
     }
     @RequestMapping("up/{id}")
