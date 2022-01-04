@@ -80,6 +80,7 @@ public class userController {
         us.delUser(id);
         System.out.println("888888888");
         System.out.println("9999999999");
+        System.out.println("2222222222222");
         return "redirect:/usera/list";
     }
     @RequestMapping("up/{id}")
