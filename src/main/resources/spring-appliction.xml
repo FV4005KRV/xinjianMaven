@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--    包扫描  创建对象-->
+    <context:component-scan base-package="com.it">
+<!--        排除路径-->
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+<!--    开启AOP注解模式-->
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+<!--    加载数据源-->
+    <context:property-placeholder location="classpath:jdbc.properties"></context:property-placeholder>
+<!--   配置数据源-->
+    <bean id="DataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="url" value="${url}"></property>
+        <property name="driverClassName" value="${driverClassName}"></property>
+        <property name="username" value="${jname}"></property>
+        <property name="password" value="${pwd}"></property>
+    </bean>
+    <!--    Mybatis 工厂-->
+    <bean id="SqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
+<!--    Mybatis引用数据源    -->
+        <property name="dataSource" ref="DataSource"></property>
+<!--        加载Mybatis配置文件-->
+        <property name="configLocation" value="classpath:Mybatis-config.xml"></property>
+<!--       配置接口映射文件-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+    </bean>
+<!--    Mybatis接口扫描-->
+    <bean id="configurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.it.mapper"></property>
+    </bean>
+<!--    事务管理器-->
+    <bean id="TransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+<!--        事务引用数据源-->
+        <property name="dataSource" ref="DataSource"></property>
+    </bean>
+<!--    加载事务管理器-->
+    <tx:annotation-driven transaction-manager="TransactionManager"></tx:annotation-driven>
+
+</beans>

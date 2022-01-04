@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.mapper.userMapper">
+    <update id="updteUser" parameterType="com.it.pojo.User">
+        update user
+        <set>
+            <if test="username !='' and username!=null">
+                username=#{username},
+            </if>
+            <if test="age>0">
+                age=#{age},
+            </if>
+            <if test="money>0">
+                money=#{money},
+            </if>
+            <if test="photo !='' and photo!=null">
+                photo=#{photo},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <delete id="delUser">
+        delete from user where id=#{id}
+    </delete>
+
+    <!-- 查询用户表记录数 -->
+    <!--<select id="get" resultType="pojo.User">
+         select id,username name,password pwd from user
+     </select>-->
+
+    <select id="getCount" resultType="java.lang.Integer">
+        select  count(id)  from user
+    </select>
+    <select id="getUserList" resultType="com.it.pojo.User">
+        select id,username,age,did,money,photo from user
+    </select>
+    <select id="getUserById" resultType="com.it.pojo.User">
+        select id,username,password,age,did,money,photo from user where id = #{id}
+    </select>
+    <insert id="myaUser">
+        insert into user(username,password,age,money,photo)values (#{username},
+        #{pwd},#{age},#{money},#{photo})
+    </insert>
+    <insert id="bant">
+        insert into user(username,password,age,money,photo)values 
+        <foreach collection="list" item="u" separator=",">
+            (#{u.username},
+            #{u.pwd},#{u.age},#{u.money},#{u.photo})
+        </foreach>
+    </insert>
+</mapper>
